@@ -14,7 +14,7 @@ export class ProductCategoryResolver {
     }
 
     @Query(() => String)
-  sayHello(): string {
+    sayHello(): string {
     return 'Hello World!';
   }
 }
