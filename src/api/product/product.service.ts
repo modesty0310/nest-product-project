@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable, UnprocessableEntityException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Product } from "./entities/product.entity";
@@ -10,10 +10,37 @@ export class ProductService {
         private readonly productRepository: Repository<Product>
     ){}
 
+    async findAll() {
+        return await this.productRepository.find();
+    }
+
+    async findOne({productId}) {
+        return await this.productRepository.findOne({where: {id:productId}});
+    }
+
     async create({createProductInput}) {
         const result = await this.productRepository.save({
             ...createProductInput
         });
         return result;
+    }
+
+    async update({productId, updateProductInput}) {
+        return await this.productRepository.save({
+            id: productId,
+            ...updateProductInput
+        })
+    }
+
+    async checkSoldout({productId}) {
+        const product = await this.productRepository.findOne({where: {id: productId}});
+
+        if(product.isSoldout){
+            throw new HttpException("이미 판매 완료된 상품입니다.", HttpStatus.CONFLICT)
+        }
+
+        // if(product.isSoldout) {
+        //     throw new UnprocessableEntityException("이미 판매가 완료된 상품")
+        // }
     }
 }
