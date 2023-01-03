@@ -15,11 +15,11 @@ export class ProductService {
     ){}
 
     async findAll() {
-        return await this.productRepository.find();
+        return await this.productRepository.find({relations: ["productSaleslocation"]});
     }
 
     async findOne({productId}) {
-        return await this.productRepository.findOne({where: {id:productId}});
+        return await this.productRepository.findOne({where: {id:productId}, relations: ["productSaleslocation"]});
     }
 
     async create({createProductInput}) {
