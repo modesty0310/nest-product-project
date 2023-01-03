@@ -33,7 +33,14 @@ export class ProductResolver {
         @Args('updateProductInput') updateProductInput: UpdateProductInput
     ){
         this.productService.checkSoldout({productId});
-        
+
         return this.productService.update({productId, updateProductInput}); 
+    }
+
+    @Mutation(() => Boolean)
+    deleteProduct(
+        @Args('productId') productId: string,
+    ) {
+        return this.productService.delete({productId});
     }
 }
