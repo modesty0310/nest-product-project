@@ -63,10 +63,20 @@ input CreateProductInput {
   name: String!
   description: String!
   price: Int!
+  createProductSaleslocationInput: CreateProductSaleslocationInput!
+}
+
+input CreateProductSaleslocationInput {
+  address: String!
+  addressDetail: String!
+  lat: Float!
+  lan: Float!
+  meetingTime: DateTime!
 }
 
 input UpdateProductInput {
   name: String
   description: String
   price: Int
+  createProductSaleslocationInput: CreateProductSaleslocationInput
 }

@@ -1,13 +1,17 @@
 import { HttpException, HttpStatus, Injectable, UnprocessableEntityException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { ProductSaleslocation } from "../productSaleslocation/entities/productSaleslocation.entity";
 import { Product } from "./entities/product.entity";
 
 @Injectable()
 export class ProductService {
     constructor(
         @InjectRepository(Product)
-        private readonly productRepository: Repository<Product>
+        private readonly productRepository: Repository<Product>,
+
+        @InjectRepository(ProductSaleslocation)
+        private readonly productSaleslocationRepository: Repository<ProductSaleslocation>
     ){}
 
     async findAll() {
@@ -19,9 +23,18 @@ export class ProductService {
     }
 
     async create({createProductInput}) {
-        const result = await this.productRepository.save({
-            ...createProductInput
+        const {createProductSaleslocationInput, ...product} = createProductInput;
+        console.log(createProductSaleslocationInput, product);
+        
+        const locatinInfo = await this.productSaleslocationRepository.save({
+            ...createProductSaleslocationInput,
         });
+        const result = await this.productRepository.save({
+            productSaleslocation: {
+                ...locatinInfo
+            },
+            ...product
+        })
         return result;
     }
 
