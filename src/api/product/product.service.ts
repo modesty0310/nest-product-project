@@ -23,7 +23,7 @@ export class ProductService {
     }
 
     async create({createProductInput}) {
-        const {createProductSaleslocationInput, ...product} = createProductInput;
+        const {createProductSaleslocationInput, productCategoryId ,...product} = createProductInput;
         console.log(createProductSaleslocationInput, product);
         
         const locatinInfo = await this.productSaleslocationRepository.save({
@@ -33,7 +33,8 @@ export class ProductService {
             productSaleslocation: {
                 ...locatinInfo
             },
-            ...product
+            ...product,
+            productCategory: productCategoryId
         })
         return result;
     }
