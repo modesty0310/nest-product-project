@@ -43,4 +43,9 @@ export class ProductService {
         //     throw new UnprocessableEntityException("이미 판매가 완료된 상품")
         // }
     }
+
+    async delete ({productId}) {
+        const result = await this.productRepository.softRemove({id: productId});
+        return result ? true : false;
+    }
 }
